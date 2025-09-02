@@ -34,12 +34,12 @@ public class TpHome extends JavaPlugin implements Listener {
 
         FileConfiguration configuration = getConfig();
         restrict_tphome = configuration.getBoolean("restrict_tphome");
-        if(restrict_tphome) {logger.info("restrict_tphome: true");};
+        if(restrict_tphome) {logger.info("restrict_tphome: true");}
 
         this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands -> {
             final LiteralArgumentBuilder<CommandSourceStack> tphomeBuilder = Commands.literal("tphome");
             tphomeBuilder.executes(ctx -> {
-                CommandSender sender = ctx.getSource().getSender(); // Retrieve the command sender
+                //CommandSender sender = ctx.getSource().getSender(); // Retrieve the command sender
                 Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
                 //logger.info("tphome command fired.");
                 //logger.info("sender = " + sender.getName());

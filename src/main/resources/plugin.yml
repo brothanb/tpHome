@@ -2,3 +2,6 @@ name: tphome
 version: ${version}
 main: io.github.brothanb.tphome.TpHome
 api-version: ${mcversion}
+description: A stupidly simple teleport home plugin
+author: brothanb
+website: https://github.com/brothanb
