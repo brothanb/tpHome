@@ -1,0 +1,4 @@
+name: tphome
+version: ${version}
+main: io.github.brothanb.tphome.TpHome
+api-version: ${mcversion}
