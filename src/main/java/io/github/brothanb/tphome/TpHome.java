@@ -3,9 +3,11 @@ package io.github.brothanb.tphome;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 //import io.papermc.paper.plugin.lifecycle.event.LifecycleEventManager;
+import io.papermc.paper.command.brigadier.argument.resolvers.selector.PlayerSelectorArgumentResolver;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.command.brigadier.Commands;
+import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import org.bukkit.Location;
 //import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -48,6 +50,8 @@ public class TpHome extends JavaPlugin implements Listener {
                         home = executor.getServer().getWorlds().get(0).getSpawnLocation();
                     }
                     player.teleport(home);
+                    logger.info(player.getName() + " went home to " + home.getWorld().getName() +
+                            " " + home.getX() + " " +home.getY() + " " + home.getZ());
                     return 1;
                 }
                 return 0;
@@ -57,26 +61,28 @@ public class TpHome extends JavaPlugin implements Listener {
                 tphomeBuilder.requires(sender -> sender.getSender().hasPermission("tphome.home") );
             }
 
-//            final ArgumentBuilder<CommandSourceStack> playerArg = Commands.argument("player", ArgumentTypes.players());
-//            playerArg.requires(source -> source.getSender().isOp());
-//            playerArg.executes(ctx -> {
-//                PlayerSelectorArgumentResolver playerResolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
-//                Player player = targetResolver.resolve(ctx.getSource()).getFirst();
-//                Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
-//
-//                //logger.info("player = " + player.getName());
-//                Location home = player.getRespawnLocation();
-//                if (home == null) {
-//                    logger.info(player.getName() + " has no home. Sending to spawn.");
-//                    executor.sendMessage(player.getName() + " has no home. Sending to spawn.");
-//                    player.sendMessage("You have no home and will be sent to spawn.");
-//                    home = executor.getServer().getWorlds().get(0).getSpawnLocation();
-//                }
-//                player.teleport(home);
-//                return 1;
-//            });
-//
-//            tphomeBuilder.then(playerArg);
+            tphomeBuilder.then(Commands.argument("player", ArgumentTypes.player())
+                    .requires(sender -> sender.getSender().hasPermission("minecraft.command.selector"))
+                    .executes(ctx -> {
+                        PlayerSelectorArgumentResolver playerResolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
+                        Player player = playerResolver.resolve(ctx.getSource()).getFirst();
+                        Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
+
+                        //logger.info("player = " + player.getName());
+                        Location home = player.getRespawnLocation();
+                        if (home == null) {
+                            logger.info(player.getName() + " has no home. Sending to spawn.");
+                            executor.sendMessage(player.getName() + " has no home. Sending to spawn.");
+                            player.sendMessage("You have no home and will be sent to spawn.");
+                            home = executor.getServer().getWorlds().get(0).getSpawnLocation();
+                        }
+                        player.teleport(home);
+                        logger.info(executor.getName() + " sent " + player.getName() + " home to " +
+                                home.getWorld().getName() + " " + home.getX() + " " +home.getY() + " " + home.getZ());
+                        return 1;
+                    })
+            );
+
 
             LiteralCommandNode tphomeNode = tphomeBuilder.build();
             commands.registrar().register(tphomeNode, "Teleport Player Home");
