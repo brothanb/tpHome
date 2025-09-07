@@ -7,12 +7,17 @@ import java.util.logging.Logger;
 
 public class TpHome extends JavaPlugin implements Listener {
 
-    public boolean restrict_tphome;
     private Logger logger;
 
     @Override
     public void onEnable() {
         logger = getLogger();
+
+        saveDefaultConfig();
+
+        FileConfiguration configuration = getConfig();
+        TpHomeCommand.setRestrictTpHome( configuration.getBoolean("restrict_tphome"));
+        logger.info("restrict_tphome: " + TpHomeCommand.isTpHomeRestricted());
 
     }
 

@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.brothanb"
-version = "1.0-SNAPSHOT"
+version = "1.1"
 
 var mcversion = "1.21.8"
 
@@ -25,7 +25,7 @@ tasks {
         )
         inputs.properties(props)
         //filteringCharset("UTF-8")
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(props)
         }
     }
