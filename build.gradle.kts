@@ -1,21 +1,26 @@
 plugins {
     id("java")
     id("xyz.jpenilla.run-paper") version "2.3.1"
+    id("com.gradleup.shadow") version "8.3.9"
 }
 
 group = "io.github.brothanb"
-version = "1.1"
+version = "1.2-SNAPSHOT"
 
 var mcversion = "1.21.8"
 
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.bstats.org/content/repositories/releases/" )
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    implementation("org.bstats:bstats-bukkit:3.1.0")
 }
+
+
 
 tasks {
     processResources {
@@ -42,6 +47,16 @@ tasks {
         // Your plugin's jar (or shadowJar if present) will be used automatically.
         minecraftVersion(mcversion)
     }
+
+    shadowJar {
+        // Relocate the bStats package to avoid conflicts with other plugins
+        relocate( "org.bstats", "io.github.brothanb.tphome.bstats")
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
+
 }
 
 java {
