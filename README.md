@@ -26,3 +26,9 @@ The command can also be used in command blocks and datapacks.
 **Permissions:**
 
 `tphome.home` - Allow user to run command when restricted.
+
+
+**Data Collected**
+
+This plugin utilizes [bStats](https://bstats.org/plugin/bukkit/tpHome) to collect usage statistics, including anonymized data about your server.
+If you wish to have your server excluded from this data collection, please edit the `bStats/config.yml` file and set `enabled` to `false`.
