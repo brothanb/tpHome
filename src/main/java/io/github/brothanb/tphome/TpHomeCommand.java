@@ -12,7 +12,7 @@ import io.papermc.paper.command.brigadier.Commands;
 import io.papermc.paper.command.brigadier.argument.ArgumentTypes;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bukkit.Location;
-//import org.bukkit.command.CommandSender;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 //import java.util.logging.Logger;
@@ -38,7 +38,7 @@ public class TpHomeCommand {
             // register your commands here ...
             final LiteralArgumentBuilder<CommandSourceStack> tphomeBuilder = Commands.literal("tphome");
             tphomeBuilder.executes(ctx -> {
-                //CommandSender sender = ctx.getSource().getSender(); // Retrieve the command sender
+                CommandSender sender = ctx.getSource().getSender(); // Retrieve the command sender
                 Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
                 //logger.info("tphome command fired.");
                 //logger.info("sender = " + sender.getName());
@@ -46,7 +46,7 @@ public class TpHomeCommand {
                 Player player;
                 if (executor instanceof Player) {
                     player = (Player) executor;
-                    doTpHome(player, executor);
+                    doTpHome(player, executor, sender);
                     return 1;
                 }
                 return 0;
@@ -63,8 +63,9 @@ public class TpHomeCommand {
                         PlayerSelectorArgumentResolver playerResolver = ctx.getArgument("player", PlayerSelectorArgumentResolver.class);
                         Player player = playerResolver.resolve(ctx.getSource()).getFirst();
                         Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
-                        player = (Player) executor;
-                        doTpHome(player, executor);
+                        CommandSender sender = ctx.getSource().getSender();
+                        //player = (Player) player;
+                        doTpHome(player, executor, sender);
                         return 1;
                     })
             );
@@ -75,18 +76,24 @@ public class TpHomeCommand {
 
     }
 
-    private static void doTpHome (Player player, Entity executor) {
+    private static void doTpHome (Player player, Entity executor, CommandSender sender) {
 
         //logger.info("player = " + player.getName());
         Location home = player.getRespawnLocation();
         if (home == null) {
             logger.info(player.getName() + " has no home. Sending to spawn.");
-            executor.sendMessage(player.getName() + " has no home. Sending to spawn.");
+            if(executor != null) { executor.sendMessage(player.getName() + " has no home. Sending to spawn.");}
             player.sendMessage("You have no home and will be sent to spawn.");
-            home = executor.getServer().getWorlds().get(0).getSpawnLocation();
+            home = player.getServer().getWorlds().get(0).getSpawnLocation();
         }
         player.teleport(home);
-        logger.info(executor.getName() + " sent " + player.getName() + " home to " +
+        String exName;
+        if(executor == null) {
+            exName = sender.getName();
+        } else {
+            exName = executor.getName();
+        }
+        logger.info(exName + " sent " + player.getName() + " home to " +
                 home.getWorld().getName() + " " + home.getX() + " " + home.getY() + " " + home.getZ());
     }
 

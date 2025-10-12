@@ -19,10 +19,16 @@ Drop into the plugins folder and restart your server.
 
 Enter the `/tphome` command into chat.
 
-Server Operators can supply an optional player to send home.
+Server Operators with the `minecraft.command.selector` permission (as well as Command Blocks and Functions) can supply an optional single player selector.
 
 The command can also be used in command blocks and datapacks.
 
-Permissions:
+**Permissions:**
 
-`tphome.home` - Allow user to run command.
+`tphome.home` - Allow user to run command when restricted.
+
+
+**Data Collected**
+
+This plugin utilizes [bStats](https://bstats.org/plugin/bukkit/tpHome) to collect usage statistics, including anonymized data about your server.
+If you wish to have your server excluded from this data collection, please edit the `bStats/config.yml` file and set `enabled` to `false`.
