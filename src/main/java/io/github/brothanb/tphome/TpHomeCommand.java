@@ -40,9 +40,9 @@ public class TpHomeCommand {
             tphomeBuilder.executes(ctx -> {
                 CommandSender sender = ctx.getSource().getSender(); // Retrieve the command sender
                 Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
-                //logger.info("tphome command fired.");
-                //logger.info("sender = " + sender.getName());
-                //logger.info("executor = " + executor.getName());
+//                logger.info("tphome command fired.");
+//                logger.info("sender = " + sender.getName());
+//                if (executor != null) logger.info("executor = " + executor.getName());
                 Player player;
                 if (executor instanceof Player) {
                     player = (Player) executor;
@@ -64,7 +64,9 @@ public class TpHomeCommand {
                         Player player = playerResolver.resolve(ctx.getSource()).getFirst();
                         Entity executor = ctx.getSource().getExecutor(); // Retrieve the command executor, which may or may not be the same as the sender
                         CommandSender sender = ctx.getSource().getSender();
-                        //player = (Player) player;
+//                        logger.info("tphome command fired with argument.");
+//                        logger.info("sender = " + sender.getName() + "(" + sender.getClass() + ")");
+//                        if (executor != null) logger.info("executor = " + executor.getName());
                         doTpHome(player, executor, sender);
                         return 1;
                     })
@@ -76,9 +78,12 @@ public class TpHomeCommand {
 
     }
 
-    private static void doTpHome (Player player, Entity executor, CommandSender sender) {
+    private static void doTpHome (@NotNull Player player, Entity executor, CommandSender sender) {
 
-        //logger.info("player = " + player.getName());
+//        logger.info("doTpHome()");
+//        logger.info("sender = " + sender.getName() + "(" + sender.getClass() + ")");
+//        if (executor != null) logger.info("executor = " + executor.getName());
+//        logger.info("player = " + player.getName());
         Location home = player.getRespawnLocation();
         if (home == null) {
             logger.info(player.getName() + " has no home. Sending to spawn.");
@@ -93,6 +98,8 @@ public class TpHomeCommand {
         } else {
             exName = executor.getName();
         }
+        sender.sendPlainMessage("Sent " + player.getName() + " home to " +
+                home.getWorld().getName() + " " + home.getX() + " " + home.getY() + " " + home.getZ());
         logger.info(exName + " sent " + player.getName() + " home to " +
                 home.getWorld().getName() + " " + home.getX() + " " + home.getY() + " " + home.getZ());
     }
