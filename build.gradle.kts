@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "io.github.brothanb"
-version = "1.3-snapshot"
+version = "1.3"
 
 var mcversion = "1.21.10"
 
