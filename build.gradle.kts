@@ -5,9 +5,9 @@ plugins {
 }
 
 group = "io.github.brothanb"
-version = "1.2"
+version = "1.3"
 
-var mcversion = "1.21.8"
+var mcversion = "1.21.10"
 
 repositories {
     mavenCentral()
@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.8-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.10-R0.1-SNAPSHOT")
     implementation("org.bstats:bstats-bukkit:3.1.0")
 }
 
